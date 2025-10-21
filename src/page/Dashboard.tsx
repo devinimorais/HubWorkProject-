@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Settings2, MoreHorizontal, TrendingUp, Users, Briefcase, Heart } from "lucide-react";
+import { TrendingUp, Users, Briefcase, Heart, CheckCircle, Clock, AlertCircle, Phone, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 import {
   Area,
   AreaChart,
@@ -68,22 +68,56 @@ const statsCards = [
   },
 ];
 
-const tableData = [
-  { header: "Introduction", section: "Main Content", status: "Done", target: "100%", limit: "5000 words", reviewer: "John Doe" },
-  { header: "Market Analysis", section: "Research", status: "In Process", target: "75%", limit: "3000 words", reviewer: "Jane Smith" },
-  { header: "Technical Approach", section: "Methodology", status: "In Process", target: "60%", limit: "4000 words", reviewer: "Bob Johnson" },
-  { header: "Budget Overview", section: "Financial", status: "Done", target: "100%", limit: "2000 words", reviewer: "Alice Brown" },
-  { header: "Team Structure", section: "Personnel", status: "In Process", target: "80%", limit: "1500 words", reviewer: "Charlie Davis" },
+const candidatosRecentes = [
+  { nome: "Maria Silva", vaga: "Auxiliar Administrativo", empresa: "Empresa ABC", status: "Entrevista Agendada", data: "20/01/2025", telefone: "(11) 98765-4321", email: "maria@email.com" },
+  { nome: "João Santos", vaga: "Atendente de Loja", empresa: "Varejo XYZ", status: "Aguardando Retorno", data: "19/01/2025", telefone: "(11) 97654-3210", email: "joao@email.com" },
+  { nome: "Ana Costa", vaga: "Recepcionista", empresa: "Clínica Saúde", status: "Contratado", data: "18/01/2025", telefone: "(11) 96543-2109", email: "ana@email.com" },
+  { nome: "Pedro Oliveira", vaga: "Auxiliar de Cozinha", empresa: "Restaurante Bom Sabor", status: "Em Análise", data: "17/01/2025", telefone: "(11) 95432-1098", email: "pedro@email.com" },
+  { nome: "Carla Mendes", vaga: "Vendedor", empresa: "Loja Roupas", status: "Entrevista Agendada", data: "16/01/2025", telefone: "(11) 94321-0987", email: "carla@email.com" },
 ];
 
 export default function Dashboard() {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Contratado":
+        return "bg-green-500/10 text-green-400 border-green-500/20";
+      case "Entrevista Agendada":
+        return "bg-blue-500/10 text-blue-400 border-blue-500/20";
+      case "Em Análise":
+        return "bg-yellow-500/10 text-yellow-400 border-yellow-500/20";
+      case "Aguardando Retorno":
+        return "bg-orange-500/10 text-orange-400 border-orange-500/20";
+      default:
+        return "bg-gray-500/10 text-gray-400 border-gray-500/20";
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "Contratado":
+        return <CheckCircle className="h-4 w-4" />;
+      case "Entrevista Agendada":
+        return <Clock className="h-4 w-4" />;
+      case "Em Análise":
+        return <AlertCircle className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
+    }
+  };
+
   return (
-    <div className="flex min-h-screen w-full bg-gray-900">
+    <div className="flex min-h-screen w-full bg-[#030712]">
       <HubWorkSidebar />
 
       {/* Main Content */}
-      <main className="flex-1 lg:pl-80 pt-16 lg:pt-0">
-        <div className="flex flex-col">
+      <main className="flex-1 lg:pl-80 pt-16 lg:pt-0 relative">
+        {/* Animated background */}
+        <div className="fixed inset-0 lg:left-80 pointer-events-none z-0">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+        </div>
+
+        <div className="relative flex flex-col z-10">
           {/* Content */}
           <div className="flex flex-1 flex-col gap-6 p-6">
 
@@ -92,31 +126,54 @@ export default function Dashboard() {
               {statsCards.map((stat, index) => {
                 const Icon = stat.icon;
                 return (
-                  <Card key={index} className="bg-gray-950 border-gray-800">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-400 font-sans">
-                        {stat.title}
-                      </CardTitle>
-                      <Icon className={`h-4 w-4 ${stat.color}`} />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold text-white font-sans">{stat.value}</div>
-                      <p className="text-xs text-green-400 font-sans">{stat.change} desde o último mês</p>
-                    </CardContent>
-                  </Card>
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card className="group relative overflow-hidden bg-white/[0.02] backdrop-blur-sm border-white/10 hover:border-purple-500/30 transition-all">
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                      <CardContent className="p-6 relative">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="relative">
+                            <div className={`absolute inset-0 ${stat.color.replace('text-', 'bg-')}/20 blur-lg rounded-full`}></div>
+                            <div className={`relative w-12 h-12 bg-gradient-to-br ${stat.color.replace('text-', 'from-')}/10 to-purple-500/10 border border-${stat.color.replace('text-', '')}/20 rounded-xl flex items-center justify-center`}>
+                              <Icon className={`h-6 w-6 ${stat.color}`} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-sm text-gray-400 font-sans mb-1">{stat.title}</p>
+                          <h3 className="text-3xl font-bold text-white font-sans mb-2">{stat.value}</h3>
+                          <p className="text-xs text-green-400 font-sans flex items-center gap-1">
+                            <TrendingUp className="h-3 w-3" />
+                            {stat.change} desde o último mês
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 );
               })}
             </div>
 
             {/* Gráfico de Área */}
-            <Card className="bg-gray-950 border-gray-800">
-              <CardHeader>
-                <CardTitle className="font-sans text-white">Pessoas Assistidas vs Vagas</CardTitle>
-                <CardDescription className="font-sans text-gray-400">
-                  Evolução mensal de pessoas em busca de emprego e vagas disponíveis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Card className="bg-white/[0.02] backdrop-blur-sm border-white/10">
+                <CardHeader>
+                  <CardTitle className="font-sans text-white">Pessoas Assistidas vs Vagas</CardTitle>
+                  <CardDescription className="font-sans text-gray-400">
+                    Evolução mensal de pessoas em busca de emprego e vagas disponíveis
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <AreaChart data={areaChartData}>
                     <defs>
@@ -156,17 +213,23 @@ export default function Dashboard() {
                   </AreaChart>
                 </ResponsiveContainer>
               </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
             {/* Gráfico de Linha */}
-            <Card className="bg-gray-950 border-gray-800">
-              <CardHeader>
-                <CardTitle className="font-sans text-white">Funil de Colocação</CardTitle>
-                <CardDescription className="font-sans text-gray-400">
-                  Acompanhamento semanal do processo de geração de emprego
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <Card className="bg-white/[0.02] backdrop-blur-sm border-white/10">
+                <CardHeader>
+                  <CardTitle className="font-sans text-white">Funil de Colocação</CardTitle>
+                  <CardDescription className="font-sans text-gray-400">
+                    Acompanhamento semanal do processo de geração de emprego
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={lineChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -183,76 +246,86 @@ export default function Dashboard() {
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
-            {/* Table */}
-            <Card className="bg-gray-950 border-gray-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <Tabs defaultValue="outline" className="w-full">
-                      <TabsList className="bg-gray-900 border-gray-800">
-                        <TabsTrigger value="outline" className="font-sans text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white">Outline</TabsTrigger>
-                        <TabsTrigger value="performance" className="font-sans text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white">Past Performance</TabsTrigger>
-                        <TabsTrigger value="personnel" className="font-sans text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white">Key Personnel</TabsTrigger>
-                        <TabsTrigger value="documents" className="font-sans text-gray-300 data-[state=active]:bg-gray-800 data-[state=active]:text-white">Focus Documents</TabsTrigger>
-                      </TabsList>
-                    </Tabs>
-                    <Button variant="outline" size="sm" className="font-sans bg-gray-900 border-gray-800 text-gray-300 hover:bg-gray-800 hover:text-white">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Section
+            {/* Table - Candidatos Recentes */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <Card className="bg-white/[0.02] backdrop-blur-sm border-white/10">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="font-sans text-white text-xl mb-2">Candidatos Recentes</CardTitle>
+                      <CardDescription className="font-sans text-gray-400">
+                        Acompanhe os últimos encaminhamentos e status de colocação
+                      </CardDescription>
+                    </div>
+                    <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-sans">
+                      Ver Todos
                     </Button>
                   </div>
-                  <Button variant="outline" size="sm" className="font-sans bg-gray-900 border-gray-800 text-gray-300 hover:bg-gray-800 hover:text-white">
-                    <Settings2 className="mr-2 h-4 w-4" />
-                    Customize Columns
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-gray-800 hover:bg-gray-900">
-                      <TableHead className="font-sans text-gray-400">Header</TableHead>
-                      <TableHead className="font-sans text-gray-400">Section Type</TableHead>
-                      <TableHead className="font-sans text-gray-400">Status</TableHead>
-                      <TableHead className="font-sans text-gray-400">Target</TableHead>
-                      <TableHead className="font-sans text-gray-400">Limit</TableHead>
-                      <TableHead className="font-sans text-gray-400">Reviewer</TableHead>
-                      <TableHead className="w-[50px]"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {tableData.map((row, index) => (
-                      <TableRow key={index} className="border-gray-800 hover:bg-gray-900">
-                        <TableCell className="font-medium font-sans text-white">{row.header}</TableCell>
-                        <TableCell className="font-sans text-gray-300">{row.section}</TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={row.status === "Done" ? "default" : "secondary"}
-                            className={
-                              row.status === "Done"
-                                ? "bg-green-600/20 text-green-400 hover:bg-green-600/30 font-sans"
-                                : "bg-yellow-600/20 text-yellow-400 hover:bg-yellow-600/30 font-sans"
-                            }
-                          >
-                            {row.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-sans text-gray-300">{row.target}</TableCell>
-                        <TableCell className="font-sans text-gray-300">{row.limit}</TableCell>
-                        <TableCell className="font-sans text-gray-300">{row.reviewer}</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white hover:bg-gray-800">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="border-white/10 hover:bg-white/5">
+                          <TableHead className="font-sans text-gray-400">Candidato</TableHead>
+                          <TableHead className="font-sans text-gray-400">Vaga</TableHead>
+                          <TableHead className="font-sans text-gray-400">Empresa</TableHead>
+                          <TableHead className="font-sans text-gray-400">Status</TableHead>
+                          <TableHead className="font-sans text-gray-400">Data</TableHead>
+                          <TableHead className="font-sans text-gray-400">Contato</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {candidatosRecentes.map((candidato, index) => (
+                          <TableRow key={index} className="border-white/10 hover:bg-white/5 transition-colors">
+                            <TableCell className="font-medium font-sans text-white">
+                              <div>
+                                <p className="font-semibold">{candidato.nome}</p>
+                                <p className="text-xs text-gray-500">{candidato.email}</p>
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-sans text-gray-300">{candidato.vaga}</TableCell>
+                            <TableCell className="font-sans text-gray-300">{candidato.empresa}</TableCell>
+                            <TableCell>
+                              <Badge className={`${getStatusColor(candidato.status)} font-sans border flex items-center gap-1 w-fit`}>
+                                {getStatusIcon(candidato.status)}
+                                {candidato.status}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="font-sans text-gray-400 text-sm">{candidato.data}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10"
+                                >
+                                  <Phone className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
+                                >
+                                  <Mail className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </main>
