@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx shadcn@latest add sheet scroll-area tooltip)",
+      "Bash(npm install @radix-ui/react-dialog @radix-ui/react-scroll-area @radix-ui/react-tooltip class-variance-authority)",
+      "Bash(npm install @radix-ui/react-dialog @radix-ui/react-scroll-area @radix-ui/react-tooltip class-variance-authority --legacy-peer-deps)",
+      "Bash(npm run build)",
+      "Bash(npm run dev)",
+      "Bash(npm install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
